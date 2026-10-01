@@ -1,0 +1,31 @@
+ADMIN NOTICE SYSTEM SETUP
+
+This adds Firebase-backed Admin Login + Notice Publish/Delete.
+
+1. Create a Firebase project at https://console.firebase.google.com/
+2. Add a Web App and copy its Firebase web config.
+3. Enable Authentication -> Email/Password.
+4. Create the authorized admin user.
+5. Create Firestore Database.
+6. Put the web config values into firebase-config.js.
+7. Upload admin.html, admin.js and firebase-config.js to your GitHub repository.
+8. Open https://manbazar1.github.io/admin.html
+
+Recommended Firestore rules (replace the email):
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /notices/{noticeId} {
+      allow read: if true;
+      allow create, update, delete:
+        if request.auth != null &&
+        request.auth.token.email == "YOUR-ADMIN-EMAIL";
+    }
+  }
+}
+
+Important:
+- Do not hard-code a password in JavaScript.
+- Do not put service-account private keys in the website.
+- PDF/document upload is currently by URL; actual file upload can be added with Firebase Storage.
+- This template is not an official government service unless authorized by the competent authority.
